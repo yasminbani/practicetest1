@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ECN 4234 Applied Econometrics – Practice Quiz</title>
+<meta name="description" content="50 multiple-choice and 15 short-answer practice questions on nonlinear regression, binary dependent variables, instrumental variables and simultaneous equations.">
+<style>
+:root{
+  --bg:#f5f2ea; --card:#fffdf8; --ink:#1b2432; --muted:#5d6675; --line:#ddd6c6;
+  --accent:#0e5a5a; --accent-ink:#ffffff; --accent-soft:#dcebe8;
+  --ok:#1d7347; --ok-soft:#dff1e6; --bad:#ad3636; --bad-soft:#f7e1de;
+  --flag:#b7791f; --flag-soft:#f8ecd2; --shadow:0 1px 2px rgba(27,36,50,.06),0 6px 20px rgba(27,36,50,.06);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#12171f; --card:#1a212c; --ink:#e9e6df; --muted:#9aa3b2; --line:#2e3746;
+    --accent:#58b8ae; --accent-ink:#0c1a1a; --accent-soft:#1d3536;
+    --ok:#5fc48d; --ok-soft:#173326; --bad:#ee8a80; --bad-soft:#3d1f1d;
+    --flag:#e3b057; --flag-soft:#3a2f17; --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55}
+h1,h2,h3{font-family:var(--serif);line-height:1.2;margin:0;font-weight:600;text-wrap:balance}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+/* top bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:16px;min-height:58px;flex-wrap:wrap}
+.brand{font-family:var(--serif);font-weight:700;font-size:1.05rem;margin-right:auto;display:flex;align-items:baseline;gap:10px}
+.brand small{font-family:var(--sans);font-weight:500;color:var(--muted);font-size:.8rem}
+.tabs{display:flex;gap:4px;overflow-x:auto}
+.tab{border:0;background:none;padding:8px 12px;border-radius:8px;color:var(--muted);font-weight:600;font-size:.92rem;white-space:nowrap}
+.tab:hover{background:var(--accent-soft);color:var(--ink)}
+.tab.on{background:var(--accent);color:var(--accent-ink)}
+
+main{padding:28px 0 64px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:24px}
+.muted{color:var(--muted)}
+.small{font-size:.875rem}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.mt{margin-top:16px}.mt2{margin-top:28px}
+
+.btn{border:1px solid var(--line);background:var(--card);padding:10px 16px;border-radius:10px;font-weight:600}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{background:none}
+.btn.danger{color:var(--bad)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.sm{padding:6px 12px;font-size:.875rem}
+
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.75rem;font-weight:700;letter-spacing:.02em;background:var(--accent-soft);color:var(--accent)}
+.badge.type{background:none;border:1px solid var(--line);color:var(--muted)}
+
+/* home */
+.hero h1{font-size:clamp(1.7rem,4vw,2.5rem)}
+.hero p{max-width:62ch;color:var(--muted);margin:10px 0 0}
+.topic h3{font-size:1.02rem;margin:8px 0 4px}
+.topic .n{font-family:var(--serif);font-size:1.6rem;font-weight:700;color:var(--accent)}
+fieldset{border:0;padding:0;margin:0}
+legend{font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:0;margin-bottom:8px}
+.choice{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:10px;cursor:pointer}
+.choice:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.choice input{margin-top:4px;accent-color:var(--accent)}
+.choice b{display:block}
+.stack{display:grid;gap:8px}
+.banner{border-left:4px solid var(--flag);background:var(--flag-soft);padding:12px 16px;border-radius:8px}
+
+/* quiz */
+.quiz{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:20px;align-items:start}
+@media (max-width:860px){.quiz{grid-template-columns:1fr}}
+.qmeta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.qmeta .num{font-weight:700;margin-right:auto;color:var(--muted);font-size:.9rem}
+.qtext{font-family:var(--serif);font-size:1.18rem;line-height:1.5}
+.eq{display:block;margin:12px 0;padding:10px 14px;background:var(--bg);border-left:3px solid var(--accent);border-radius:6px;font-family:"Cambria Math",Cambria,Georgia,serif;font-size:1.02rem;overflow-x:auto;white-space:nowrap}
+.opts{display:grid;gap:10px;margin-top:20px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px}
+.opt:hover:not([disabled]){border-color:var(--accent)}
+.opt .l{flex:none;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.sel .l{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft)}
+.opt.ok .l{background:var(--ok);border-color:var(--ok);color:#fff}
+.opt.bad{border-color:var(--bad);background:var(--bad-soft)}
+.opt.bad .l{background:var(--bad);border-color:var(--bad);color:#fff}
+.opt[disabled]{cursor:default;opacity:1}
+.tag{margin-left:auto;flex:none;font-size:.75rem;font-weight:700}
+.opt.ok .tag{color:var(--ok)}.opt.bad .tag{color:var(--bad)}
+.fb{margin-top:16px;padding:14px 16px;border-radius:10px;background:var(--bg);border:1px solid var(--line)}
+.fb b.h{display:block;margin-bottom:4px}
+.fb.ok b.h{color:var(--ok)}.fb.bad b.h{color:var(--bad)}
+.qnav{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;align-items:center}
+.qnav .sp{margin-left:auto}
+.side{position:sticky;top:78px;display:grid;gap:14px}
+@media (max-width:860px){.side{position:static}}
+.side .card{padding:16px}
+.timer{font-family:var(--serif);font-size:1.6rem;font-weight:700;font-variant-numeric:tabular-nums}
+.prog{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .25s}
+.nums{display:grid;grid-template-columns:repeat(auto-fill,minmax(36px,1fr));gap:6px}
+.nums button{height:34px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);font-size:.82rem;font-weight:600;font-variant-numeric:tabular-nums;position:relative}
+.nums .ans{background:var(--accent-soft);border-color:var(--accent)}
+.nums .ok{background:var(--ok-soft);border-color:var(--ok)}
+.nums .bad{background:var(--bad-soft);border-color:var(--bad)}
+.nums .cur{outline:2px solid var(--ink);outline-offset:1px}
+.nums .flg::after{content:"";position:absolute;top:-4px;right:-4px;width:10px;height:10px;border-radius:50%;background:var(--flag)}
+.key{display:flex;gap:12px;flex-wrap:wrap;font-size:.75rem;color:var(--muted)}
+.key span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;border:1.5px solid var(--line);vertical-align:-1px}
+.key .k1::before{background:var(--accent-soft);border-color:var(--accent)}
+.key .k2::before{background:var(--flag);border-color:var(--flag);border-radius:50%}
+
+/* results */
+.score{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+.ring{width:150px;height:150px;flex:none}
+.ring text{font-family:var(--serif);font-weight:700;fill:var(--ink)}
+.stats{display:flex;gap:24px;flex-wrap:wrap;margin-top:12px}
+.stats div b{display:block;font-family:var(--serif);font-size:1.4rem;font-variant-numeric:tabular-nums}
+.stats div span{font-size:.8rem;color:var(--muted)}
+.bars{display:grid;gap:14px}
+.barrow .top{display:flex;justify-content:space-between;gap:12px;font-size:.92rem;margin-bottom:5px}
+.barrow .top b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.track{height:10px;background:var(--line);border-radius:99px;overflow:hidden}
+.track i{display:block;height:100%;border-radius:99px;background:var(--accent)}
+.track i.lo{background:var(--bad)}.track i.mid{background:var(--flag)}.track i.hi{background:var(--ok)}
+.rev{border-top:1px solid var(--line);padding:18px 0}
+.rev:first-child{border-top:0}
+.rev .qtext{font-size:1.05rem}
+.rev .opts{margin-top:12px;gap:6px}
+.rev .opt{padding:8px 12px;font-size:.94rem}
+.pill{display:inline-block;font-size:.75rem;font-weight:700;padding:2px 9px;border-radius:99px}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}.pill.bad{background:var(--bad-soft);color:var(--bad)}.pill.na{background:var(--flag-soft);color:var(--flag)}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.tscroll{overflow-x:auto}
+
+/* short answers */
+.sa{padding:20px 24px}
+.sa + .sa{margin-top:14px}
+.sa textarea{width:100%;min-height:120px;margin-top:14px;padding:12px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;resize:vertical}
+.model{margin-top:14px;padding:14px 16px;border-radius:10px;background:var(--bg);border:1px solid var(--line)}
+.model h4{margin:0 0 6px;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.pt{display:flex;gap:10px;align-items:flex-start;padding:7px 0;cursor:pointer}
+.pt input{margin-top:5px;accent-color:var(--ok);flex:none}
+.marks{font-weight:700;font-variant-numeric:tabular-nums}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(10,14,20,.55);display:grid;place-items:center;z-index:50;padding:20px}
+.modal .card{max-width:420px;width:100%}
+footer{padding:24px 0 40px;color:var(--muted);font-size:.8rem;text-align:center}
+@media print{.bar,.side,.qnav,footer,.noprint{display:none!important}body{background:#fff}.card{box-shadow:none}}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="wrap">
+    <div class="brand">ECN 4234 <small>Applied Econometrics · Practice</small></div>
+    <nav class="tabs" id="tabs" aria-label="Sections"></nav>
+  </div>
+</header>
+<main><div class="wrap" id="app"></div></main>
+<footer><div class="wrap">Practice questions based on the course slides: Nonlinear Regression Functions, Qualitative Regression Models, Instrumental Variables, Simultaneous Equations. Progress is saved in this browser only.</div></footer>
+<div id="modal"></div>
+
+<script>
+/* ============================== QUESTION BANK ==============================
+   MCQ format: { id, t: topic, k: 'T' theory | 'A' applied, q: question (HTML),
+                 o: [four options – THE FIRST ONE IS THE CORRECT ANSWER], e: explanation }
+   Options are shuffled every attempt, so the order here does not matter to students.
+   ========================================================================== */
+const TOPICS = {
+  nl:  { name: "Nonlinear Regression Functions", short: "Nonlinear" },
+  bin: { name: "Binary Dependent Variables: LPM, Probit & Logit", short: "LPM / Probit / Logit" },
+  iv:  { name: "Instrumental Variables & 2SLS", short: "IV & 2SLS" },
+  sem: { name: "Simultaneous Equations", short: "Simultaneous Eqs" }
+};
+
+const MCQ = [
+/* ---------- Nonlinear regression functions (14) ---------- */
+{id:"n1",t:"nl",k:"T",
+ q:`The true relationship between Y and X is nonlinear, but a researcher estimates a linear regression of Y on X. Which statement is correct?`,
+ o:[`The functional form is misspecified, and the estimated effect of X on Y is in general biased`,
+    `OLS is still unbiased for the effect of X as long as the sample is large`,
+    `Only the standard errors are wrong; the slope remains a correct estimate of the effect at every X`,
+    `The regression suffers from perfect multicollinearity`],
+ e:`When the relation is nonlinear the marginal effect of X depends on the value of X. A linear specification has the wrong functional form, so the estimator of the effect is biased – it is not right even on average.`},
+{id:"n2",t:"nl",k:"T",
+ q:`The quadratic model <span class="eq">Y<sub>i</sub> = β<sub>0</sub> + β<sub>1</sub>X<sub>i</sub> + β<sub>2</sub>X<sub>i</sub><sup>2</sup> + u<sub>i</sub></span> can be estimated by OLS because:`,
+ o:[`it is linear in the parameters; X² is simply an additional regressor`,
+    `X and X² are uncorrelated by construction`,
+    `the dependent variable has been transformed into logarithms`,
+    `OLS can estimate any model that is nonlinear in the parameters`],
+ e:`A polynomial regression is nonlinear in X but linear in the β's. After generating X² as a new variable it is an ordinary multiple regression, so estimation and testing proceed as usual.`},
+{id:"n3",t:"nl",k:"A",
+ q:`Using California school district data (Income in $1,000 per capita): <span class="eq">TestScore^ = 607.3 + 3.85 Income − 0.0423 Income²</span> What is the predicted change in TestScore when Income rises from 5 to 6?`,
+ o:[`About 3.4 points`,`3.85 points`,`About 3.8 points`,`About 2.9 points`],
+ e:`ΔŶ = 3.85(6 − 5) − 0.0423(6² − 5²) = 3.85 − 0.0423 × 11 = 3.85 − 0.47 ≈ 3.4. The effect must be computed as “after minus before”; it is not simply β₁.`},
+{id:"n4",t:"nl",k:"A",
+ q:`In the quadratic regression of TestScore on Income, the coefficient on Income² is −0.0423 with a robust standard error of 0.0048 (t = −8.85). What do you conclude about the null hypothesis that the population regression is linear?`,
+ o:[`Reject linearity at the 1% level in favour of the quadratic specification`,
+    `Fail to reject linearity, because the coefficient is very close to zero`,
+    `Reject linearity only at the 10% level`,
+    `Nothing can be concluded without an F-test on both Income terms`],
+ e:`Linearity corresponds to H₀: β₂ = 0. |t| = 8.85 is far above the 1% critical value of 2.58, so linearity is rejected. The small size of the coefficient is irrelevant – it multiplies Income², which is large.`},
+{id:"n5",t:"nl",k:"T",
+ q:`In the linear-log model <span class="eq">Y<sub>i</sub> = β<sub>0</sub> + β<sub>1</sub> ln(X<sub>i</sub>) + u<sub>i</sub></span> how is β<sub>1</sub> interpreted?`,
+ o:[`A 1% increase in X is associated with a change in Y of 0.01·β₁ units`,
+    `A one-unit increase in X is associated with a 100·β₁% change in Y`,
+    `A 1% increase in X is associated with a β₁% change in Y`,
+    `A one-unit increase in X is associated with a β₁-unit change in Y`],
+ e:`In the linear-log case a 1% rise in X raises ln(X) by about 0.01, so Y changes by 0.01β₁ units.`},
+{id:"n6",t:"nl",k:"A",
+ q:`An estimated linear-log regression is <span class="eq">TestScore^ = 557.8 + 36.42 ln(Income)</span> A 1% increase in district income is associated with an increase in test scores of approximately:`,
+ o:[`0.36 points`,`36.42 points`,`36.42%`,`0.36%`],
+ e:`Linear-log: ΔY ≈ 0.01 × β₁ = 0.01 × 36.42 = 0.36 points. Y is in levels, so the answer is in points, not percent.`},
+{id:"n7",t:"nl",k:"T",
+ q:`In the log-linear model <span class="eq">ln(Y<sub>i</sub>) = β<sub>0</sub> + β<sub>1</sub>X<sub>i</sub> + u<sub>i</sub></span> a one-unit increase in X is associated with:`,
+ o:[`a 100·β₁% change in Y`,`a β₁-unit change in Y`,`a 0.01·β₁-unit change in Y`,`a β₁% change in Y`],
+ e:`A one-unit change in X changes ln(Y) by β₁, which corresponds to roughly a 100β₁% change in Y (for small changes).`},
+{id:"n8",t:"nl",k:"T",
+ q:`In which specification does the slope coefficient β<sub>1</sub> have the interpretation of an elasticity?`,
+ o:[`ln(Y) = β₀ + β₁ ln(X) + u`,`Y = β₀ + β₁ ln(X) + u`,`ln(Y) = β₀ + β₁X + u`,`Y = β₀ + β₁X + β₂X² + u`],
+ e:`In the log-log model a 1% change in X is associated with a β₁% change in Y, which is the definition of an elasticity.`},
+{id:"n9",t:"nl",k:"A",
+ q:`An estimated log-log regression is <span class="eq">ln(TestScore)^ = 6.336 + 0.0554 ln(Income)</span> If income increases by 10% in a district where TestScore = 650, the predicted increase in the test score is about:`,
+ o:[`3.6 points`,`0.55 points`,`5.5 points`,`36 points`],
+ e:`Elasticity = 0.0554, so a 10% rise in income raises TestScore by about 0.554%. 0.00554 × 650 ≈ 3.6 points.`},
+{id:"n10",t:"nl",k:"T",
+ q:`The negative exponential growth model <span class="eq">Y<sub>i</sub> = β<sub>0</sub>[1 − e<sup>−β<sub>1</sub>(X<sub>i</sub> − β<sub>2</sub>)</sup>] + u<sub>i</sub></span> is estimated by nonlinear least squares (NLS) rather than OLS because:`,
+ o:[`the model is nonlinear in the parameters`,
+    `the model is nonlinear in X`,
+    `the dependent variable is bounded above`,
+    `the errors are heteroskedastic`],
+ e:`OLS handles models that are linear in the parameters (even if nonlinear in X). Here the β's enter nonlinearly, so the sum of squared residuals must be minimised numerically – NLS.`},
+{id:"n11",t:"nl",k:"A",
+ q:`HiSTR = 1 if the student–teacher ratio ≥ 20 and HiEL = 1 if the share of English learners ≥ 10%. <span class="eq">TestScore^ = 664.1 − 18.2 HiEL − 1.9 HiSTR − 3.5 (HiSTR × HiEL)</span> What is the estimated effect of moving from a low to a high STR in districts with a high share of English learners?`,
+ o:[`−5.4 points`,`−1.9 points`,`−3.5 points`,`−21.7 points`],
+ e:`Effect of HiSTR = β₁ + β₃·HiEL = −1.9 − 3.5(1) = −5.4. When HiEL = 0 the effect is only −1.9; the interaction coefficient is the extra effect when HiEL = 1.`},
+{id:"n12",t:"nl",k:"A",
+ q:`<span class="eq">TestScore^ = 682.2 − 0.97 STR + 5.6 HiEL − 1.28 (STR × HiEL)</span> What is the slope of the regression line (effect of one extra student per teacher) for districts with HiEL = 1?`,
+ o:[`−2.25`,`−0.97`,`−1.28`,`+4.32`],
+ e:`For HiEL = 1 the line is (682.2 + 5.6) + (−0.97 − 1.28)·STR, so the slope is −2.25. For HiEL = 0 it is −0.97.`},
+{id:"n13",t:"nl",k:"T",
+ q:`In <span class="eq">Y<sub>i</sub> = β<sub>0</sub> + β<sub>1</sub>D<sub>i</sub> + β<sub>2</sub>X<sub>i</sub> + β<sub>3</sub>(D<sub>i</sub> × X<sub>i</sub>) + u<sub>i</sub></span> where D is a dummy, which hypothesis states that the D = 0 and D = 1 groups have the <em>same slope</em> (but possibly different intercepts)?`,
+ o:[`H₀: β₃ = 0`,`H₀: β₁ = 0`,`H₀: β₁ = 0 and β₃ = 0`,`H₀: β₂ = 0`],
+ e:`The slopes are β₂ (D = 0) and β₂ + β₃ (D = 1); they are equal when β₃ = 0. β₁ = 0 means equal intercepts, and β₁ = β₃ = 0 jointly (an F-test) means the two lines are identical.`},
+{id:"n14",t:"nl",k:"A",
+ q:`<span class="eq">TestScore^ = 686.3 − 1.12 STR − 0.67 PctEL + 0.0012 (STR × PctEL)</span> What is the estimated effect on TestScore of a one-unit increase in STR in a district where PctEL = 20?`,
+ o:[`−1.10`,`−1.12`,`−1.14`,`−0.67`],
+ e:`ΔY/ΔSTR = β₁ + β₃·PctEL = −1.12 + 0.0012 × 20 = −1.096 ≈ −1.10. With two continuous variables interacted, the effect of one depends on the level of the other.`},
+
+/* ---------- Binary dependent variables (13) ---------- */
+{id:"b1",t:"bin",k:"T",
+ q:`When the dependent variable Y is binary (0/1), the population regression function E(Y | X) equals:`,
+ o:[`Pr(Y = 1 | X)`,`Pr(Y = 0 | X)`,`the odds that Y = 1`,`the variance of Y given X`],
+ e:`E(Y | X) = 1 × Pr(Y = 1 | X) + 0 × Pr(Y = 0 | X) = Pr(Y = 1 | X). This is why predicted values are interpreted as probabilities.`},
+{id:"b2",t:"bin",k:"T",
+ q:`In the linear probability model <span class="eq">Y<sub>i</sub> = β<sub>0</sub> + β<sub>1</sub>X<sub>i</sub> + u<sub>i</sub></span> with binary Y, the coefficient β<sub>1</sub> measures:`,
+ o:[`the change in the probability that Y = 1 for a one-unit change in X`,
+    `the change in the z-value for a one-unit change in X`,
+    `the percentage change in Y for a 1% change in X`,
+    `the change in the log-odds that Y = 1 for a one-unit change in X`],
+ e:`In the LPM, Pr(Y = 1 | X) = β₀ + β₁X, so β₁ is the change in that probability per unit of X – and it is the same at every value of X.`},
+{id:"b3",t:"bin",k:"A",
+ q:`Boston mortgage data, LPM (deny = 1 if the application is denied; P/I = payment-to-income ratio): <span class="eq">deny^ = −0.080 + 0.604 (P/I ratio)</span> What is the predicted probability of denial for an applicant with P/I ratio = 0.3?`,
+ o:[`0.101`,`0.181`,`0.524`,`0.261`],
+ e:`−0.080 + 0.604 × 0.3 = −0.080 + 0.181 = 0.101, i.e. about a 10.1% chance of denial.`},
+{id:"b4",t:"bin",k:"A",
+ q:`<span class="eq">deny^ = −0.091 + 0.559 (P/I ratio) + 0.177 black</span> How should the coefficient on <em>black</em> be interpreted in this linear probability model?`,
+ o:[`Holding the P/I ratio constant, a black applicant's denial probability is 17.7 percentage points higher`,
+    `Black applicants are 17.7% of the sample`,
+    `Holding the P/I ratio constant, a black applicant's denial probability is 0.177 percentage points higher`,
+    `Black applicants have a z-value that is 0.177 higher`],
+ e:`In an LPM a coefficient is a change in probability: 0.177 = 17.7 percentage points, holding P/I constant.`},
+{id:"b5",t:"bin",k:"T",
+ q:`Which is a genuine shortcoming of the linear probability model?`,
+ o:[`Predicted probabilities can fall below 0 or above 1`,
+    `It cannot be estimated by OLS`,
+    `Its coefficients have no probability interpretation`,
+    `It cannot include more than one regressor`],
+ e:`Because the LPM is a straight line, it can predict “probabilities” outside [0, 1] and it forces the effect of X to be the same at all values of X. It is, however, easy to estimate (OLS) and to interpret.`},
+{id:"b6",t:"bin",k:"T",
+ q:`Inference in the linear probability model should be based on:`,
+ o:[`heteroskedasticity-robust standard errors`,
+    `homoskedasticity-only standard errors, since Y takes only two values`,
+    `maximum likelihood standard errors`,
+    `standard errors divided by the first-stage R²`],
+ e:`With a binary Y the error variance depends on X (it equals p(1 − p)), so the errors are heteroskedastic and robust standard errors are needed. Otherwise inference is the same as in multiple regression.`},
+{id:"b7",t:"bin",k:"A",
+ q:`A probit model has β<sub>0</sub> = −2 and β<sub>1</sub> = 3. Given Φ(−0.8) = 0.2119, what is Pr(Y = 1 | X = 0.4)?`,
+ o:[`0.2119`,`0.7881`,`−0.8`,`0.40`],
+ e:`z = −2 + 3 × 0.4 = −0.8, and the probit probability is Φ(z) = Φ(−0.8) = 0.2119 – the area under the standard normal density to the left of −0.8.`},
+{id:"b8",t:"bin",k:"A",
+ q:`Estimated probit: <span class="eq">Pr(deny = 1 | P/I) = Φ(−2.19 + 2.97 × P/I)</span> Given Φ(−1.30) = 0.097 and Φ(−1.00) = 0.159, by how much does the predicted probability of denial change when the P/I ratio rises from 0.3 to 0.4?`,
+ o:[`It rises by about 6.2 percentage points`,
+    `It rises by 29.7 percentage points`,
+    `It rises by 2.97 percentage points`,
+    `It rises by 15.9 percentage points`],
+ e:`At 0.3: z = −2.19 + 0.89 = −1.30 → 0.097. At 0.4: z = −2.19 + 1.19 = −1.00 → 0.159. Change = 0.062. A probit coefficient is not a change in probability – you must compute the probability before and after.`},
+{id:"b9",t:"bin",k:"A",
+ q:`A logit model has β<sub>0</sub> = −3 and β<sub>1</sub> = 2. Using F(z) = 1 / (1 + e<sup>−z</sup>), what is Pr(Y = 1 | X = 0.4)? (e<sup>2.2</sup> ≈ 9.03)`,
+ o:[`About 0.10`,`About 0.90`,`About 0.014`,`About 0.22`],
+ e:`z = −3 + 2 × 0.4 = −2.2. Pr = 1 / (1 + e^2.2) = 1 / 10.03 ≈ 0.0998.`},
+{id:"b10",t:"bin",k:"T",
+ q:`Probit and logit coefficients are estimated by:`,
+ o:[`maximum likelihood`,`ordinary least squares`,`two-stage least squares`,`OLS applied to the reduced form`],
+ e:`Both are nonlinear in the parameters and are estimated by maximum likelihood (the iteration log in Stata shows the log likelihood being maximised). In large samples the estimators are normally distributed, so t-tests and confidence intervals work as usual.`},
+{id:"b11",t:"bin",k:"T",
+ q:`In a probit model, the effect on Pr(Y = 1) of a one-unit change in X:`,
+ o:[`depends on the starting value of X (and of the other regressors)`,
+    `always equals β₁`,
+    `always equals Φ(β₁)`,
+    `is constant, as in the linear probability model`],
+ e:`β₁ is the change in the z-value. Because Φ is S-shaped, the same change in z produces different changes in probability depending on where you start.`},
+{id:"b12",t:"bin",k:"A",
+ q:`With the same data and regressors, the coefficient on <em>black</em> is 0.71 in a probit and 1.27 in a logit. For a white applicant with P/I = 0.3 the predicted denial probabilities are 0.075 (probit) and 0.075 (logit). The best conclusion is:`,
+ o:[`The coefficients differ because the two models use different distribution functions, but the predicted probabilities are very similar`,
+    `The logit shows that the race effect is almost twice as large`,
+    `One of the two models must be misspecified`,
+    `The probit is biased because its coefficient is smaller`],
+ e:`Probit uses the standard normal CDF and logit the logistic CDF, so their coefficients are on different scales and cannot be compared directly. In practice the two give very similar predicted probabilities.`},
+{id:"b13",t:"bin",k:"A",
+ q:`In the LPM with only the P/I ratio as a control, the coefficient on <em>black</em> is 0.177. After adding credit history, loan-to-value ratio and other applicant characteristics it falls to 0.084 (SE 0.023). This suggests that:`,
+ o:[`the simpler regression suffered from omitted variable bias, although a statistically significant race effect remains`,
+    `race has no effect on the probability of denial once controls are added`,
+    `the added controls are irrelevant, since the coefficient stayed positive`,
+    `the LPM is invalid and only probit results can be trusted`],
+ e:`The omitted variables affect denial and are correlated with race, so leaving them out biased the coefficient upward. With controls the effect is smaller but still significant (t ≈ 3.7) and large in real-world terms.`},
+
+/* ---------- Instrumental variables (13) ---------- */
+{id:"i1",t:"iv",k:"T",
+ q:`A regressor x is said to be <em>endogenous</em> when:`,
+ o:[`it is correlated with the error term u`,
+    `it is correlated with the dependent variable y`,
+    `it is correlated with another regressor`,
+    `it is measured in logarithms`],
+ e:`Endogeneity means cov(x, u) ≠ 0. OLS then gives biased and inconsistent estimates.`},
+{id:"i2",t:"iv",k:"T",
+ q:`Which pair lists two sources of endogeneity discussed in the course?`,
+ o:[`Omitted variables and measurement error`,
+    `Heteroskedasticity and large outliers`,
+    `Multicollinearity and small sample size`,
+    `Nonlinearity in X and a binary dependent variable`],
+ e:`Unobserved variables that end up in the error term, and measurement error in a regressor, both create correlation between the regressor and the error. Simultaneity is a third source.`},
+{id:"i3",t:"iv",k:"T",
+ q:`A valid instrument z for an endogenous regressor x in <span class="eq">y = β<sub>0</sub> + β<sub>1</sub>x + u</span> must be:`,
+ o:[`correlated with x, uncorrelated with u, and excluded from the equation for y`,
+    `correlated with u, uncorrelated with x, and excluded from the equation for y`,
+    `correlated with both x and u`,
+    `uncorrelated with both x and y`],
+ e:`Relevance: cov(z, x) ≠ 0. Exogeneity: cov(z, u) = 0. And z does not belong in the model for y in its own right.`},
+{id:"i4",t:"iv",k:"T",
+ q:`With one endogenous regressor x and one instrument z, the IV estimator of β<sub>1</sub> is:`,
+ o:[`cov(z, y) / cov(z, x)`,`cov(x, y) / var(x)`,`cov(z, x) / cov(z, y)`,`cov(z, y) / var(z)`],
+ e:`It follows from the condition cov(z, u) = cov(z, y) − β₁cov(z, x) = 0. The OLS estimator, cov(x, y)/var(x), is the special case where x is its own instrument.`},
+{id:"i5",t:"iv",k:"A",
+ q:`From a sample you compute: cov(x, y) = 1.0, var(x) = 5.0, cov(z, y) = 1.2, cov(z, x) = 4.0. What is the IV estimate of β<sub>1</sub>?`,
+ o:[`0.30`,`0.20`,`0.24`,`3.33`],
+ e:`β̂₁(IV) = cov(z, y)/cov(z, x) = 1.2/4.0 = 0.30. The OLS estimate would be 1.0/5.0 = 0.20.`},
+{id:"i6",t:"iv",k:"A",
+ q:`In a regression of lwage on educ, OLS gives a coefficient of 0.109. Using father's education as an instrument, IV gives 0.059. What is the correct reading of the IV estimate?`,
+ o:[`One more year of education is associated with about a 5.9% increase in wages`,
+    `One more year of education raises wages by $0.059`,
+    `A 1% increase in education raises wages by 5.9%`,
+    `One more year of father's education raises wages by 5.9%`],
+ e:`The model is log-linear, so the coefficient × 100 is the percentage change in wages per extra year of education. The IV estimate is lower than OLS (10.9%), which hints that educ is endogenous.`},
+{id:"i7",t:"iv",k:"T",
+ q:`What happens in the <em>first stage</em> of two-stage least squares?`,
+ o:[`The endogenous regressor is regressed on the instrument(s) and the exogenous variables, and fitted values are obtained`,
+    `The dependent variable is regressed on the instrument(s)`,
+    `The dependent variable is regressed on the endogenous regressor and the residuals are saved`,
+    `The instrument is regressed on the dependent variable`],
+ e:`First stage: x = δ₀ + δ₁z + v, giving x̂, which contains only the exogenous variation in x. Second stage: regress y on x̂.`},
+{id:"i8",t:"iv",k:"A",
+ q:`The OLS standard error on educ is 0.014 and the R² from regressing educ on fatheduc is 0.17. Using se(2SLS) = se(OLS) / √R²<sub>x,z</sub>, the 2SLS standard error is approximately:`,
+ o:[`0.034`,`0.082`,`0.0024`,`0.014`],
+ e:`√0.17 ≈ 0.412, and 0.014/0.412 ≈ 0.034. Because R² < 1, 2SLS standard errors are always larger than OLS standard errors.`},
+{id:"i9",t:"iv",k:"T",
+ q:`If the instrument is only weakly related to the endogenous regressor (low R²<sub>x,z</sub>), then the 2SLS estimator will have:`,
+ o:[`a larger variance, so coefficients are less likely to be statistically significant`,
+    `a smaller variance than OLS`,
+    `the same variance as OLS`,
+    `no bias and no variance`],
+ e:`var(β̂₁, 2SLS) = σ² / (SST_x · R²_x,z). The weaker the first-stage relationship, the smaller R² and the larger the variance.`},
+{id:"i10",t:"iv",k:"A",
+ q:`To test whether educ is endogenous, the reduced-form residual v̂ is added to the wage equation. Its coefficient is 0.058 with a standard error of 0.034. What do you conclude?`,
+ o:[`Reject exogeneity at the 10% level (but not at 5%): there is some evidence that educ is endogenous`,
+    `Reject exogeneity at the 1% level`,
+    `Fail to reject exogeneity at every conventional level`,
+    `The instruments are invalid`],
+ e:`t = 0.058/0.034 ≈ 1.71, which exceeds 1.645 (10%) but not 1.96 (5%). At the 10% level educ is endogenous, so IV/2SLS should be used.`},
+{id:"i11",t:"iv",k:"T",
+ q:`In the endogeneity test based on <span class="eq">y<sub>1</sub> = β<sub>0</sub> + β<sub>1</sub>y<sub>2</sub> + β<sub>2</sub>z<sub>1</sub> + β<sub>3</sub>z<sub>2</sub> + γ<sub>1</sub>v̂<sub>2</sub> + u<sub>1</sub></span> the null hypothesis H<sub>0</sub>: γ<sub>1</sub> = 0 says that:`,
+ o:[`y₂ is exogenous`,`y₂ is endogenous`,`the instruments are weak`,`the equation is not identified`],
+ e:`v̂₂ carries the potentially endogenous part of y₂. If it has no effect (γ₁ = 0) there is no evidence of endogeneity; γ₁ ≠ 0 indicates endogeneity.`},
+{id:"i12",t:"iv",k:"A",
+ q:`A researcher wants an instrument for education in a wage equation where unobserved ability is in the error term. Which candidate is <em>least</em> likely to be valid?`,
+ o:[`The worker's score on an aptitude test, which reflects ability`,
+    `Proximity to a college when the worker was 16`,
+    `The worker's quarter (month) of birth`,
+    `The number of siblings`],
+ e:`An aptitude score is correlated with ability, which sits in the error term, so it violates cov(z, u) = 0. (It would be better used as a proxy variable in the equation.) The other three are the instruments suggested in the slides.`},
+{id:"i13",t:"iv",k:"A",
+ q:`A student runs the two stages of 2SLS “by hand” using two separate OLS regressions. Compared with a built-in 2SLS command, the student will obtain:`,
+ o:[`the same coefficient but incorrect standard errors in the second stage`,
+    `a different coefficient but the same standard errors`,
+    `identical coefficients and standard errors`,
+    `a biased coefficient and incorrect standard errors`],
+ e:`The coefficient is the same, but the second-stage OLS standard errors ignore that x̂ was estimated. They must be corrected (0.033 vs 0.031 in the slides); software 2SLS routines do this automatically.`},
+
+/* ---------- Simultaneous equations (10) ---------- */
+{id:"s1",t:"sem",k:"T",
+ q:`A simultaneous equations model is appropriate when:`,
+ o:[`two or more variables are jointly determined, for example as the outcome of a market equilibrium`,
+    `the dependent variable is binary`,
+    `the regression function is nonlinear in X`,
+    `the same individuals are observed in two time periods`],
+ e:`Price and quantity, or hours worked and wages, are determined together by supply and demand. Simultaneity is another form of endogeneity.`},
+{id:"s2",t:"sem",k:"T",
+ q:`Consider <span class="eq">y<sub>1</sub> = β<sub>0</sub> + β<sub>1</sub>y<sub>2</sub> + β<sub>2</sub>z<sub>1</sub> + u<sub>1</sub><br>y<sub>2</sub> = α<sub>0</sub> + α<sub>1</sub>y<sub>1</sub> + α<sub>2</sub>z<sub>2</sub> + u<sub>2</sub></span> Why is OLS on the first equation biased and inconsistent?`,
+ o:[`y₂ depends on y₁, which contains u₁, so y₂ is correlated with u₁`,
+    `z₁ and z₂ are perfectly collinear`,
+    `u₁ and u₂ are heteroskedastic`,
+    `z₁ is correlated with u₁`],
+ e:`Substituting the first equation into the second shows that y₂ is a function of u₁ (its reduced-form error is (α₁u₁ + u₂)/(1 − α₁β₁)). That is simultaneity bias.`},
+{id:"s3",t:"sem",k:"T",
+ q:`A <em>reduced form</em> equation expresses:`,
+ o:[`an endogenous variable as a function of the exogenous variables only`,
+    `an endogenous variable as a function of the other endogenous variable only`,
+    `the error term as a function of the instruments`,
+    `an exogenous variable as a function of the endogenous variables`],
+ e:`For example y₂ = δ₀ + δ₁z₁ + δ₂z₂ + e. Since z₁ and z₂ are uncorrelated with the new error term, OLS on the reduced form is unbiased and consistent.`},
+{id:"s4",t:"sem",k:"A",
+ q:`In the system <span class="eq">y<sub>1</sub> = β<sub>0</sub> + β<sub>1</sub>y<sub>2</sub> + β<sub>2</sub>z<sub>1</sub> + u<sub>1</sub><br>y<sub>2</sub> = α<sub>0</sub> + α<sub>1</sub>y<sub>1</sub> + α<sub>2</sub>z<sub>2</sub> + u<sub>2</sub></span> which variable serves as the instrument for y<sub>2</sub> when estimating the <em>first</em> equation?`,
+ o:[`z₂`,`z₁`,`y₁`,`u₂`],
+ e:`z₂ is excluded from the y₁ equation and is related to y₂ (it appears in the y₂ equation) – exactly the properties of an instrument. Symmetrically, z₁ is the instrument for y₁ in the second equation.`},
+{id:"s5",t:"sem",k:"A",
+ q:`Labour market for married working women: <span class="eq">hours = β<sub>0</sub> + β<sub>1</sub>lwage + β<sub>2</sub>educ + β<sub>3</sub>age + β<sub>4</sub>kidslt6 + β<sub>5</sub>nwifeinc + u<sub>1</sub><br>lwage = α<sub>0</sub> + α<sub>1</sub>hours + α<sub>2</sub>educ + α<sub>3</sub>exper + α<sub>4</sub>exper² + u<sub>2</sub></span> Which variables are the instruments for lwage in the hours (labour supply) equation?`,
+ o:[`exper and exper²`,`age, kidslt6 and nwifeinc`,`educ`,`hours`],
+ e:`exper and exper² are excluded from the hours equation but appear in the wage equation. age, kidslt6 and nwifeinc do the reverse job: they instrument hours in the wage equation. educ is in both equations, so it cannot identify either.`},
+{id:"s6",t:"sem",k:"A",
+ q:`In the hours equation, the OLS coefficient on lwage is −2.05 (SE 54.9), while 2SLS gives 1,639.6 (SE 470.6). How is the 2SLS estimate interpreted?`,
+ o:[`A 1% increase in the wage increases labour supply by about 16.4 hours, and the effect is statistically significant`,
+    `A 1% increase in the wage increases labour supply by about 1,640 hours`,
+    `A $1 increase in the wage increases hours by 16.4%`,
+    `The effect is positive but statistically insignificant`],
+ e:`hours is in levels and wage in logs (linear-log), so a 1% wage increase changes hours by 0.01 × 1,639.6 ≈ 16.4. t = 1,639.6/470.6 ≈ 3.5, so it is significant – unlike the OLS estimate, which is distorted by simultaneity bias.`},
+{id:"s7",t:"sem",k:"T",
+ q:`The <em>order condition</em> for identifying an equation in a two-equation system requires that:`,
+ o:[`at least one exogenous variable in the system is excluded from that equation`,
+    `the equation contains every exogenous variable in the system`,
+    `the two equations contain exactly the same exogenous variables`,
+    `the equation has a high R²`],
+ e:`An excluded exogenous variable is needed to act as an instrument. The rank condition strengthens this: the excluded variable must actually appear (with a non-zero coefficient) in the other equation.`},
+{id:"s8",t:"sem",k:"A",
+ q:`To check the rank condition for the hours equation, the reduced form for lwage is estimated and the coefficients on exper and exper² are tested jointly: F = 9.3, p-value = 0.001. The conclusion is:`,
+ o:[`The instruments are jointly significant, so the hours equation is identified`,
+    `The instruments are jointly insignificant, so the hours equation is not identified`,
+    `lwage is exogenous in the hours equation`,
+    `The lwage equation is identified`],
+ e:`H₀: δ₁ = δ₂ = 0 (not identified) is rejected, so exper and exper² are relevant for lwage and the hours equation is identified. Identification of the lwage equation is a separate test using age, kidslt6 and nwifeinc in the reduced form for hours.`},
+{id:"s9",t:"sem",k:"A",
+ q:`Consider the system <span class="eq">y<sub>1</sub> = β<sub>0</sub> + β<sub>1</sub>y<sub>2</sub> + β<sub>2</sub>z<sub>1</sub> + u<sub>1</sub><br>y<sub>2</sub> = α<sub>0</sub> + α<sub>1</sub>y<sub>1</sub> + u<sub>2</sub></span> where z<sub>1</sub> is the only exogenous variable. Which equation(s) are identified?`,
+ o:[`Only the y₂ equation`,`Only the y₁ equation`,`Both equations`,`Neither equation`],
+ e:`The y₂ equation excludes z₁, which appears in the y₁ equation, so z₁ can instrument y₁ there. The y₁ equation has no excluded exogenous variable to instrument y₂, so it is not identified.`},
+{id:"s10",t:"sem",k:"T",
+ q:`When 2SLS is applied to a system of simultaneous equations, the first-stage regression for each endogenous variable includes:`,
+ o:[`all the exogenous variables in the system`,
+    `only the exogenous variables that appear in the same structural equation`,
+    `only the other endogenous variable`,
+    `only the excluded instruments, without the other exogenous variables`],
+ e:`The first stage is the reduced form: each endogenous variable is regressed on every exogenous variable (the equation's own exogenous variables plus the instruments from the other equation). The fitted values then replace the endogenous regressor in the second stage.`}
+];
+
+/* Short-answer format: { id, t, k, q, model: model answer (HTML), pts: [five 1-mark points] } */
+const SHORT = [
+{id:"sa1",t:"nl",k:"A",
+ q:`A quadratic regression gives <span class="eq">TestScore^ = 607.3 + 3.85 Income − 0.0423 Income²</span> (Income in $1,000). Calculate the predicted effect on TestScore of a $1,000 rise in income (a) from 25 to 26 and (b) from 45 to 46. Comment on the pattern and explain why you should not use the equation to predict the effect of a change from 65 to 66.`,
+ model:`(a) ΔŶ = 3.85 − 0.0423(26² − 25²) = 3.85 − 0.0423 × 51 ≈ <b>1.7 points</b>. (b) ΔŶ = 3.85 − 0.0423(46² − 45²) = 3.85 − 0.0423 × 91 ≈ <b>0.0 points</b>. The effect of income falls as income rises – a diminishing marginal effect, which is what the negative coefficient on Income² implies. Values such as 65 lie outside the range of the sample; the quadratic would predict test scores falling with income, which is an artefact of the functional form, so we should not extrapolate.`,
+ pts:[`Uses the “after minus before” method rather than reading off β₁`,
+      `Effect from 25 to 26 ≈ 1.7 points`,
+      `Effect from 45 to 46 ≈ 0 points`,
+      `States that the marginal effect of income diminishes as income rises`,
+      `Explains that 65–66 is outside the range of the data, so extrapolation is unreliable`]},
+{id:"sa2",t:"nl",k:"T",
+ q:`State the three logarithmic regression specifications and give the interpretation of β<sub>1</sub> in each. Which one yields an elasticity?`,
+ model:`<b>Linear-log:</b> Y = β₀ + β₁ln(X) + u – a 1% increase in X changes Y by 0.01β₁ units. <b>Log-linear:</b> ln(Y) = β₀ + β₁X + u – a one-unit increase in X changes Y by 100β₁%. <b>Log-log:</b> ln(Y) = β₀ + β₁ln(X) + u – a 1% increase in X changes Y by β₁%, so β₁ is the elasticity of Y with respect to X. All three are linear in the parameters and estimated by OLS; the interpretations hold for small changes.`,
+ pts:[`Writes the three specifications correctly`,
+      `Linear-log: 1% change in X → 0.01β₁ unit change in Y`,
+      `Log-linear: 1 unit change in X → 100β₁% change in Y`,
+      `Log-log: 1% change in X → β₁% change in Y`,
+      `Identifies log-log β₁ as the elasticity`]},
+{id:"sa3",t:"nl",k:"A",
+ q:`<span class="eq">TestScore^ = 664.1 − 18.2 HiEL − 1.9 HiSTR − 3.5 (HiSTR × HiEL)</span> The standard error on the interaction term is 3.1. (a) Compute the predicted mean test score for each of the four groups of districts. (b) Interpret the interaction coefficient. (c) Is the interaction statistically significant at the 5% level?`,
+ model:`(a) Low STR, low EL: <b>664.1</b>. High STR, low EL: 664.1 − 1.9 = <b>662.2</b>. Low STR, high EL: 664.1 − 18.2 = <b>645.9</b>. High STR, high EL: 664.1 − 18.2 − 1.9 − 3.5 = <b>640.5</b>. (b) The effect of a high STR is −1.9 points when HiEL = 0 and −1.9 − 3.5 = −5.4 points when HiEL = 1; the coefficient −3.5 is the <em>additional</em> effect of large classes in districts with many English learners. (c) t = −3.5/3.1 ≈ −1.13, |t| < 1.96, so the interaction is not statistically significant at 5%.`,
+ pts:[`Low-EL means: 664.1 (low STR) and 662.2 (high STR)`,
+      `High-EL means: 645.9 (low STR) and 640.5 (high STR)`,
+      `Effect of HiSTR is −1.9 when HiEL = 0 and −5.4 when HiEL = 1`,
+      `Interprets −3.5 as the extra effect of HiSTR when HiEL = 1`,
+      `t ≈ −1.13, so not significant at the 5% level`]},
+{id:"sa4",t:"nl",k:"T",
+ q:`Distinguish between a regression that is “nonlinear in the variables” and one that is “nonlinear in the parameters”. Give an example of each and state how each is estimated.`,
+ model:`A model that is nonlinear in the variables uses transformed regressors (X², ln X, X₁ × X₂) but each β still enters linearly, e.g. Y = β₀ + β₁X + β₂X² + u. It can be rewritten as a multiple regression with new regressors and estimated by <b>OLS</b>, with the usual t- and F-tests. A model that is nonlinear in the parameters cannot be rewritten that way, e.g. the negative exponential growth curve Y = β₀[1 − e<sup>−β₁(X − β₂)</sup>] + u. It is estimated by <b>nonlinear least squares</b>, which searches numerically (iteratively) for the parameter values that minimise the sum of squared residuals.`,
+ pts:[`Nonlinear in variables: X is transformed but the β's enter linearly`,
+      `Gives a valid example (polynomial, log, or interaction model)`,
+      `States that this type is estimated by OLS`,
+      `Gives a valid example that is nonlinear in parameters (e.g. negative exponential growth)`,
+      `States that it needs NLS – numerical minimisation of the sum of squared residuals`]},
+{id:"sa5",t:"bin",k:"T",
+ q:`Explain what the linear probability model is and how its slope coefficient is interpreted. Give two advantages and two disadvantages of the model.`,
+ model:`The LPM is the ordinary linear regression model applied to a binary dependent variable. Because E(Y | X) = Pr(Y = 1 | X), the fitted value is the predicted probability that Y = 1, and β₁ is the change in that probability for a one-unit change in X. <b>Advantages:</b> simple to estimate by OLS and easy to interpret; inference is the same as in multiple regression (with heteroskedasticity-robust standard errors). <b>Disadvantages:</b> the effect of X on the probability is forced to be constant at all values of X, and predicted probabilities can be less than 0 or greater than 1. Probit and logit solve both problems.`,
+ pts:[`LPM = linear regression (OLS) with a binary dependent variable`,
+      `Fitted value is Pr(Y = 1 | X); β₁ is the change in probability per unit of X`,
+      `Advantage: simple to estimate and interpret / usual inference with robust SEs`,
+      `Disadvantage: constant marginal effect regardless of X`,
+      `Disadvantage: predicted probabilities can lie outside [0, 1]`]},
+{id:"sa6",t:"bin",k:"A",
+ q:`An estimated probit model is <span class="eq">Pr(deny = 1) = Φ(−2.26 + 2.74 × P/I + 0.71 × black)</span> Using Φ(−1.44) = 0.075 and Φ(−0.73) = 0.233, compute the predicted probability of denial for (a) a white applicant and (b) a black applicant, both with P/I = 0.3. Interpret the difference.`,
+ model:`(a) White: z = −2.26 + 2.74 × 0.3 = −2.26 + 0.82 = −1.44, so Pr = Φ(−1.44) = <b>0.075</b>. (b) Black: z = −1.44 + 0.71 = −0.73, so Pr = Φ(−0.73) = <b>0.233</b>. The difference is 0.158: holding the P/I ratio at 0.3, a black applicant is about <b>15.8 percentage points</b> more likely to be denied. Note that 0.71 is the change in the z-value, not in the probability; the size of the gap in probability would be different at another P/I ratio.`,
+ pts:[`z for white applicant = −1.44`,
+      `Pr(deny) for white applicant = 0.075`,
+      `z for black applicant = −0.73 and Pr(deny) = 0.233`,
+      `Difference ≈ 0.158 = 15.8 percentage points, holding P/I constant`,
+      `Notes that the coefficient is a change in z, and/or the probability gap depends on the P/I level`]},
+{id:"sa7",t:"bin",k:"A",
+ q:`A logit model estimated on the same data gives <span class="eq">Pr(deny = 1) = F(−4.13 + 5.37 × P/I + 1.27 × black),  F(z) = 1 / (1 + e<sup>−z</sup>)</span> Compute the predicted denial probability for a white applicant with P/I = 0.3 (e<sup>2.52</sup> ≈ 12.4). The probit estimate for the same applicant is 0.075. What does the comparison tell you about choosing between logit and probit?`,
+ model:`z = −4.13 + 5.37 × 0.3 = −4.13 + 1.61 = −2.52. Pr = 1/(1 + e<sup>2.52</sup>) = 1/13.4 ≈ <b>0.075</b>. This is virtually identical to the probit prediction even though the logit coefficients are much larger. The coefficients differ because logit uses the logistic CDF and probit the standard normal CDF, so they are not directly comparable; the predicted probabilities are. In practice results rarely hinge on the choice, and both are widely used (logit was historically preferred because it was computationally easier).`,
+ pts:[`z = −2.52`,
+      `Applies the logistic formula correctly: 1/(1 + e^2.52)`,
+      `Predicted probability ≈ 0.075`,
+      `Logit and probit coefficients differ because they use different distribution functions`,
+      `Predicted probabilities are very similar, so the choice rarely matters in practice`]},
+{id:"sa8",t:"bin",k:"T",
+ q:`Why is the effect of a change in X on Pr(Y = 1) not constant in probit and logit models? Describe how you would calculate the effect, how these models are estimated, and one measure of fit.`,
+ model:`Probit and logit model Pr(Y = 1 | X) with an S-shaped cumulative distribution function (normal or logistic) evaluated at z = β₀ + β₁X. This keeps probabilities between 0 and 1, but because the curve is nonlinear, a given change in z moves the probability by different amounts depending on the starting point – so the effect depends on the initial X (and other regressors). To compute an effect: calculate the predicted probability at the initial X, calculate it again at the new X, and take the difference. The models are estimated by <b>maximum likelihood</b>; estimators are normally distributed in large samples, so tests and confidence intervals are as usual. Fit can be measured by the <b>fraction correctly predicted</b> (using a 50% cut-off) or the <b>pseudo-R²</b> (improvement in the log likelihood relative to a model with no X's).`,
+ pts:[`Probability is an S-shaped (nonlinear) CDF of z = β₀ + β₁X, bounded between 0 and 1`,
+      `Therefore the effect of ΔX depends on the starting value of X`,
+      `Method: predicted probability “after” minus predicted probability “before”`,
+      `Estimated by maximum likelihood`,
+      `Names a measure of fit: fraction correctly predicted or pseudo-R²`]},
+{id:"sa9",t:"iv",k:"T",
+ q:`What is the endogeneity problem? Give two sources of endogeneity, state the consequence for OLS, and list two possible solutions.`,
+ model:`Endogeneity arises when an explanatory variable is correlated with the error term, cov(x, u) ≠ 0. <b>Sources:</b> omitted variables (an unobserved determinant of y that is correlated with x ends up in the error), measurement error in x, and simultaneity (x and y jointly determined). <b>Consequence:</b> the OLS estimator is biased and inconsistent. <b>Solutions:</b> find and include the omitted variable; include a proxy variable for it; use fixed effects with panel data to eliminate individual-specific effects; or use instrumental variables / 2SLS, replacing the endogenous variable with a predicted value that contains only exogenous information.`,
+ pts:[`Defines endogeneity: regressor correlated with the error term`,
+      `First source (omitted variables, measurement error, or simultaneity)`,
+      `Second, different source`,
+      `OLS is biased and inconsistent`,
+      `Two solutions (include the variable, proxy, fixed effects, or IV/2SLS)`]},
+{id:"sa10",t:"iv",k:"T",
+ q:`A researcher uses father's education (fatheduc) as an instrument for educ in <span class="eq">lwage = β<sub>0</sub> + β<sub>1</sub>educ + u</span> State the three properties fatheduc must have to be a good instrument. Which property can be checked with the data, and how?`,
+ model:`(1) <b>Exclusion:</b> fatheduc does not appear in the wage equation – it has no direct effect on the worker's wage. (2) <b>Relevance:</b> fatheduc is correlated with educ, cov(fatheduc, educ) ≠ 0; in the first stage educ = δ₀ + δ₁fatheduc + v we need δ₁ ≠ 0. (3) <b>Exogeneity:</b> fatheduc is uncorrelated with the error, cov(fatheduc, u) = 0 – for example, it must not be related to the worker's unobserved ability. Relevance can be tested: estimate the first stage and test H₀: δ₁ = 0 (in the slides δ̂₁ = 0.269, SE 0.029, highly significant). Exogeneity cannot be tested directly because u is unobserved; it must be argued.`,
+ pts:[`Instrument is excluded from the wage (structural) equation`,
+      `Relevance: correlated with educ (δ₁ ≠ 0 in the first stage)`,
+      `Exogeneity: uncorrelated with the error term u`,
+      `Relevance is testable via the significance of the instrument in the first stage`,
+      `Exogeneity is not directly testable / relies on economic argument`]},
+{id:"sa11",t:"iv",k:"A",
+ q:`You want to estimate <span class="eq">lwage = β<sub>0</sub> + β<sub>1</sub>educ + β<sub>2</sub>exper + β<sub>3</sub>exper² + u<sub>1</sub></span> where educ is endogenous and fatheduc and motheduc are available as instruments. Describe the two stages of 2SLS. The OLS estimate of β<sub>1</sub> is 0.108 (SE 0.014) and the 2SLS estimate is 0.061 (SE 0.031). Interpret and compare the results.`,
+ model:`<b>First stage (reduced form):</b> regress educ on <em>all</em> exogenous variables – exper, exper², fatheduc and motheduc – and save the fitted values educ^, which contain only exogenous information. <b>Second stage:</b> regress lwage on educ^, exper and exper². <b>Interpretation:</b> OLS says one more year of education is associated with a 10.8% rise in wages; 2SLS says 6.1%. After correcting for endogeneity the return to education is smaller, suggesting OLS was biased upward (e.g. by omitted ability). The 2SLS standard error is more than twice as large, so the estimate is less precise – significant at 10% (t ≈ 1.97) rather than at 1%. Second-stage standard errors should come from a 2SLS routine, not from a manual OLS second stage.`,
+ pts:[`First stage: educ regressed on the instruments fatheduc and motheduc…`,
+      `…and also on the exogenous variables exper and exper²; fitted values saved`,
+      `Second stage: lwage regressed on fitted educ, exper and exper²`,
+      `Interprets 10.8% (OLS) versus 6.1% (2SLS) return per year of education`,
+      `Notes 2SLS has a larger standard error / is less significant (or that SEs need correcting)`]},
+{id:"sa12",t:"iv",k:"A",
+ q:`Describe step by step how to test whether educ is endogenous in the wage equation of the previous question. In the slides, the coefficient on the first-stage residual v̂ is 0.058 with a standard error of 0.034. State the hypotheses and your conclusion.`,
+ model:`<b>Step 1:</b> estimate the reduced form educ = δ₀ + δ₁exper + δ₂exper² + δ₃fatheduc + δ₄motheduc + v₂ and save the residuals v̂₂. The fitted values hold the exogenous part of educ; the residuals hold the potentially endogenous part. <b>Step 2:</b> add v̂₂ to the structural equation: lwage = β₀ + β₁educ + β₂exper + β₃exper² + γ₁v̂₂ + u₁, and estimate by OLS. <b>Hypotheses:</b> H₀: γ₁ = 0 (educ is exogenous) against Hₐ: γ₁ ≠ 0 (educ is endogenous). <b>Result:</b> t = 0.058/0.034 ≈ 1.71, which is significant at the 10% level but not at 5%. At the 10% level we reject exogeneity, so educ is endogenous and IV/2SLS should be used.`,
+ pts:[`Estimates the reduced form for educ on all exogenous variables and instruments`,
+      `Saves the residuals and adds them to the structural wage equation`,
+      `H₀: γ₁ = 0 means exogenous; Hₐ: γ₁ ≠ 0 means endogenous`,
+      `Computes t ≈ 1.71 – significant at 10% but not at 5%`,
+      `Concludes educ is endogenous (at 10%), so IV/2SLS is needed`]},
+{id:"sa13",t:"sem",k:"T",
+ q:`Using the system <span class="eq">y<sub>1</sub> = β<sub>0</sub> + β<sub>1</sub>y<sub>2</sub> + β<sub>2</sub>z<sub>1</sub> + u<sub>1</sub><br>y<sub>2</sub> = α<sub>0</sub> + α<sub>1</sub>y<sub>1</sub> + α<sub>2</sub>z<sub>2</sub> + u<sub>2</sub></span> explain what causes simultaneity bias, and explain why the reduced form can be estimated consistently by OLS.`,
+ model:`y₁ and y₂ are jointly determined: y₂ depends on y₁, and y₁ contains u₁. Substituting the first equation into the second and solving gives the reduced form y₂ = δ₀ + δ₁z₁ + δ₂z₂ + e, where the error e = (α₁u₁ + u₂)/(1 − α₁β₁). Because y₂ is a function of u₁, it is correlated with the error of the first equation – y₂ is endogenous there, so OLS on the structural equation is biased and inconsistent (simultaneity bias). The same argument applies to y₁ in the second equation. The reduced form has only exogenous variables z₁ and z₂ on the right-hand side, which are uncorrelated with the composite error, so OLS on it is unbiased and consistent.`,
+ pts:[`y₁ and y₂ are jointly determined (each appears in the other's equation)`,
+      `Substitution shows y₂ depends on u₁`,
+      `Hence y₂ is correlated with u₁ – endogenous – and OLS is biased and inconsistent`,
+      `Reduced form expresses an endogenous variable in terms of z₁ and z₂ only`,
+      `z₁, z₂ are uncorrelated with the reduced-form error, so OLS is consistent`]},
+{id:"sa14",t:"sem",k:"A",
+ q:`<span class="eq">hours = β<sub>0</sub> + β<sub>1</sub>lwage + β<sub>2</sub>educ + β<sub>3</sub>age + β<sub>4</sub>kidslt6 + β<sub>5</sub>nwifeinc + u<sub>1</sub><br>lwage = α<sub>0</sub> + α<sub>1</sub>hours + α<sub>2</sub>educ + α<sub>3</sub>exper + α<sub>4</sub>exper² + u<sub>2</sub></span> Identify the instruments available for each equation and explain why they qualify. Then describe how 2SLS would be used to estimate the hours equation.`,
+ model:`<b>Hours (supply) equation:</b> lwage is endogenous. Instruments are <b>exper and exper²</b> – they affect the wage offered (they are in the lwage equation) but are excluded from the hours equation. <b>Wage (demand) equation:</b> hours is endogenous. Instruments are <b>age, kidslt6 and nwifeinc</b> – they affect labour supply but are excluded from the wage equation. educ appears in both equations, so it cannot serve as an instrument for either. <b>2SLS for the hours equation:</b> first stage – regress lwage on all exogenous variables (exper, exper², educ, age, kidslt6, nwifeinc) and obtain fitted values; second stage – regress hours on fitted lwage, educ, age, kidslt6 and nwifeinc.`,
+ pts:[`exper and exper² are the instruments for lwage in the hours equation`,
+      `age, kidslt6 and nwifeinc are the instruments for hours in the wage equation`,
+      `Reason: excluded from the equation of interest but included in the other equation`,
+      `First stage: lwage on all exogenous variables in the system; save fitted values`,
+      `Second stage: hours on fitted lwage plus educ, age, kidslt6, nwifeinc`]},
+{id:"sa15",t:"sem",k:"A",
+ q:`State the order condition and the rank condition for identification. For the labour supply system, the reduced form for lwage gives F = 9.3 (p = 0.001) for exper and exper² jointly, and the reduced form for hours gives F = 4.46 (p = 0.043) for age, kidslt6 and nwifeinc jointly. What do these tests show?`,
+ model:`<b>Order condition:</b> an equation is identified if at least one exogenous variable in the system is excluded from it. <b>Rank condition:</b> an equation is identified if and only if the other equation contains at least one exogenous variable (with a non-zero coefficient) that is excluded from this equation. The rank condition is tested in the reduced form of the endogenous regressor by testing whether the excluded variables are jointly significant; H₀: all their coefficients are zero (not identified). <b>Hours equation:</b> F = 9.3, p = 0.001 → reject H₀; exper and exper² matter for lwage, so the hours equation is identified. <b>Wage equation:</b> F = 4.46, p = 0.043 → reject H₀ at 5%; the wage equation is also identified, though the evidence is weaker.`,
+ pts:[`Order condition: at least one exogenous variable is excluded from the equation`,
+      `Rank condition: the excluded exogenous variable must appear in the other equation`,
+      `Tested with a (joint) significance test in the reduced form; H₀ = not identified`,
+      `F = 9.3, p = 0.001 → hours equation is identified`,
+      `F = 4.46, p = 0.043 → lwage equation is identified at the 5% level`]}
+];
+
+/* ================================ APP ================================ */
+const LS = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+};
+const K = { att:"ecn4234.attempt", last:"ecn4234.last", hist:"ecn4234.history", sa:"ecn4234.short" };
+const byId = Object.fromEntries(MCQ.map(q => [q.id, q]));
+const app = document.getElementById("app");
+const LETTERS = ["A","B","C","D"];
+
+let view = "home";
+let att = LS.get(K.att, null);          // attempt in progress
+let last = LS.get(K.last, null);        // last finished attempt (for review)
+let sa = LS.get(K.sa, {});              // short-answer state
+let setup = { mode:"practice", topics:Object.keys(TOPICS), shuffle:true };
+let revFilter = "all";
+let tick = null;
+
+const shuffle = a => { a = a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const pct = (c,n) => n ? Math.round(100*c/n) : 0;
+const fmt = s => String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+const lvl = p => p>=70 ? "hi" : p>=50 ? "mid" : "lo";
+
+function go(v){ view = v; render(); window.scrollTo(0,0); }
+
+function tabs(){
+  const t = [["home","Home"],["quiz","MCQ quiz"],["short","Short answers"],["perf","My performance"]];
+  const cur = view==="results" ? "quiz" : view;
+  document.getElementById("tabs").innerHTML = t.map(([v,l]) =>
+    `<button class="tab ${cur===v?"on":""}" data-act="tab" data-v="${v}">${l}</button>`).join("");
+}
+
+function render(){
+  clearInterval(tick); tick = null;
+  tabs();
+  if(view==="quiz" && !att) view = last ? "results" : "home", tabs();
+  ({home:vHome, quiz:vQuiz, results:vResults, short:vShort, perf:vPerf})[view]();
+}
+
+/* ---------- HOME ---------- */
+function vHome(){
+  const count = MCQ.filter(q => setup.topics.includes(q.t)).length;
+  const saMarks = shortTotals();
+  const hist = LS.get(K.hist, []);
+  const best = hist.length ? Math.max(...hist.map(h => pct(h.score,h.total))) : null;
+  app.innerHTML = `
+  <section class="hero">
+    <h1>Practice quiz: Topics 8, 11, 15 &amp; 16</h1>
+    <p>50 multiple-choice questions with instant explanations and 15 short-answer questions with model answers and a marking guide. A mix of theory and applied questions drawn from the lecture slides.</p>
+  </section>
+  ${att ? `<div class="banner mt2 row"><span style="margin-right:auto">You have a quiz in progress – ${att.items.filter(i=>i.sel!==null).length} of ${att.items.length} answered.</span>
+     <button class="btn primary sm" data-act="tab" data-v="quiz">Resume</button><button class="btn sm" data-act="discard">Discard</button></div>` : ""}
+  <section class="grid g4 mt2">
+    ${Object.entries(TOPICS).map(([k,t]) => `<div class="card topic">
+       <div class="n">${MCQ.filter(q=>q.t===k).length}<span class="small muted" style="font-family:var(--sans);font-weight:500"> MCQ · ${SHORT.filter(q=>q.t===k).length} short</span></div>
+       <h3>${t.name}</h3></div>`).join("")}
+  </section>
+  <section class="grid g2 mt2">
+    <div class="card">
+      <h2>Multiple-choice quiz</h2>
+      <div class="stack mt">
+        <fieldset><legend>Mode</legend><div class="stack">
+          <label class="choice"><input type="radio" name="mode" value="practice" ${setup.mode==="practice"?"checked":""}><span><b>Practice</b><span class="small muted">Check each answer and read the explanation as you go.</span></span></label>
+          <label class="choice"><input type="radio" name="mode" value="exam" ${setup.mode==="exam"?"checked":""}><span><b>Test</b><span class="small muted">No feedback until you submit. Answers can be changed and flagged.</span></span></label>
+        </div></fieldset>
+        <fieldset class="mt"><legend>Topics</legend><div class="stack">
+          ${Object.entries(TOPICS).map(([k,t]) => `<label class="choice"><input type="checkbox" name="topic" value="${k}" ${setup.topics.includes(k)?"checked":""}><span>${t.name} <span class="small muted">(${MCQ.filter(q=>q.t===k).length})</span></span></label>`).join("")}
+        </div></fieldset>
+        <label class="choice mt"><input type="checkbox" name="shuffle" ${setup.shuffle?"checked":""}><span>Shuffle question order</span></label>
+        <div class="row mt"><button class="btn primary" data-act="start" ${count?"":"disabled"}>Start ${count} question${count===1?"":"s"}</button>
+        ${best!==null ? `<span class="small muted">Best so far: ${best}%</span>` : ""}</div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Short-answer questions</h2>
+      <p class="muted">Write your answer, then reveal the model answer and tick the marking points you covered. Each question is worth 5 marks.</p>
+      <div class="stats"><div><b>${saMarks.got} / ${SHORT.length*5}</b><span>marks self-awarded</span></div><div><b>${saMarks.done} / ${SHORT.length}</b><span>questions marked</span></div></div>
+      <div class="row mt"><button class="btn primary" data-act="tab" data-v="short">Open short answers</button>
+      <button class="btn" data-act="tab" data-v="perf">View my performance</button></div>
+    </div>
+  </section>`;
+}
+
+/* ---------- QUIZ ---------- */
+function startQuiz(ids, mode){
+  att = { mode, i:0, secs:0, items: ids.map(id => ({ id, ord: shuffle([0,1,2,3]), sel:null, chk:false, flag:false })) };
+  LS.set(K.att, att); go("quiz");
+}
+const isRight = it => it.sel === 0;
+const locked = it => att.mode==="practice" && it.chk;
+
+function vQuiz(){
+  const it = att.items[att.i], q = byId[it.id], n = att.items.length;
+  const answered = att.items.filter(x => x.sel!==null).length;
+  const lock = locked(it);
+  app.innerHTML = `
+  <div class="quiz">
+    <div class="card">
+      <div class="qmeta"><span class="num">Question ${att.i+1} of ${n}</span>
+        <span class="badge">${TOPICS[q.t].short}</span><span class="badge type">${q.k==="T"?"Theory":"Applied"}</span></div>
+      <div class="qtext">${q.q}</div>
+      <div class="opts" role="radiogroup" aria-label="Answer options">
+        ${it.ord.map((oi,pos) => {
+          let c = "", tag = "";
+          if(lock){ if(oi===0){ c="ok"; tag="Correct"; } else if(oi===it.sel){ c="bad"; tag="Your answer"; } }
+          else if(oi===it.sel) c="sel";
+          return `<button class="opt ${c}" role="radio" aria-checked="${oi===it.sel}" data-act="pick" data-o="${oi}" ${lock?"disabled":""}><span class="l">${LETTERS[pos]}</span><span>${q.o[oi]}</span>${tag?`<span class="tag">${tag}</span>`:""}</button>`;
+        }).join("")}
+      </div>
+      ${lock ? `<div class="fb ${isRight(it)?"ok":"bad"}"><b class="h">${isRight(it)?"Correct":"Not quite"}</b>${q.e}</div>` : ""}
+      <div class="qnav">
+        <button class="btn" data-act="prev" ${att.i===0?"disabled":""}>← Previous</button>
+        <button class="btn ${it.flag?"":"ghost"}" data-act="flag">${it.flag?"⚑ Flagged":"⚐ Flag"}</button>
+        <span class="sp"></span>
+        ${att.mode==="practice" && !it.chk ? `<button class="btn primary" data-act="check" ${it.sel===null?"disabled":""}>Check answer</button>` :
+          att.i<n-1 ? `<button class="btn primary" data-act="next">Next →</button>` :
+          `<button class="btn primary" data-act="submit">Finish &amp; see results</button>`}
+      </div>
+    </div>
+    <aside class="side">
+      <div class="card">
+        <div class="row" style="justify-content:space-between"><span class="small muted">${att.mode==="practice"?"Practice mode":"Test mode"}</span><span class="timer" id="timer">${fmt(att.secs)}</span></div>
+        <div class="prog mt"><i style="width:${pct(answered,n)}%"></i></div>
+        <div class="small muted" style="margin-top:6px">${answered} of ${n} answered</div>
+      </div>
+      <div class="card">
+        <div class="nums">${att.items.map((x,j) => {
+          let c = "";
+          if(att.mode==="practice" && x.chk) c = isRight(x) ? "ok" : "bad"; else if(x.sel!==null) c = "ans";
+          return `<button class="${c} ${j===att.i?"cur":""} ${x.flag?"flg":""}" data-act="jump" data-j="${j}" aria-label="Go to question ${j+1}">${j+1}</button>`;
+        }).join("")}</div>
+        <div class="key mt"><span class="k1">Answered</span><span class="k2">Flagged</span></div>
+        <button class="btn mt" style="width:100%" data-act="submit">Finish &amp; see results</button>
+      </div>
+    </aside>
+  </div>`;
+  tick = setInterval(() => { att.secs++; const t = document.getElementById("timer"); if(t) t.textContent = fmt(att.secs); if(att.secs%5===0) LS.set(K.att, att); }, 1000);
+}
+
+function finish(){
+  const tally = () => ({});
+  const bt = tally(), bk = tally(); let score = 0;
+  att.items.forEach(it => {
+    const q = byId[it.id], r = isRight(it) ? 1 : 0; score += r;
+    (bt[q.t] = bt[q.t] || [0,0])[0] += r; bt[q.t][1]++;
+    (bk[q.k] = bk[q.k] || [0,0])[0] += r; bk[q.k][1]++;
+  });
+  last = { date: Date.now(), mode: att.mode, secs: att.secs, score, total: att.items.length, bt, bk,
+           items: att.items.map(({id,ord,sel,flag}) => ({id,ord,sel,flag})) };
+  const hist = LS.get(K.hist, []);
+  hist.unshift({ date:last.date, mode:last.mode, secs:last.secs, score, total:last.total, bt, bk });
+  LS.set(K.hist, hist.slice(0,30)); LS.set(K.last, last); LS.del(K.att);
+  att = null; revFilter = "all"; closeModal(); go("results");
+}
+
+/* ---------- RESULTS ---------- */
+function ring(p){
+  const r = 62, c = 2*Math.PI*r, col = p>=70?"var(--ok)":p>=50?"var(--flag)":"var(--bad)";
+  return `<svg class="ring" viewBox="0 0 150 150" role="img" aria-label="Score ${p} percent"><circle cx="75" cy="75" r="${r}" fill="none" stroke="var(--line)" stroke-width="12"/>
+  <circle cx="75" cy="75" r="${r}" fill="none" stroke="${col}" stroke-width="12" stroke-linecap="round" stroke-dasharray="${c*p/100} ${c}" ${p?"":'visibility="hidden"'} transform="rotate(-90 75 75)"/>
+  <text x="75" y="84" text-anchor="middle" font-size="34">${p}%</text></svg>`;
+}
+function bars(obj, labels){
+  return `<div class="bars">${Object.keys(labels).filter(k => obj[k]).map(k => { const [c,n] = obj[k], p = pct(c,n);
+    return `<div class="barrow"><div class="top"><span>${labels[k]}</span><b>${c} / ${n} · ${p}%</b></div><div class="track"><i class="${lvl(p)}" style="width:${p}%"></i></div></div>`; }).join("")}</div>`;
+}
+const TOPIC_LABELS = Object.fromEntries(Object.entries(TOPICS).map(([k,t]) => [k,t.name]));
+const TYPE_LABELS = { T:"Theory questions", A:"Applied questions" };
+
+function vResults(){
+  if(!last){ go("home"); return; }
+  const p = pct(last.score,last.total);
+  const msg = p>=80 ? "Excellent – you have a strong grasp of these topics." : p>=65 ? "Good work. Review the explanations for the questions you missed." :
+              p>=50 ? "A pass, but there are gaps. Revisit the weaker topics below." : "More revision needed. Work through the slides for the weaker topics, then try again.";
+  const weak = Object.keys(last.bt).filter(k => pct(...last.bt[k]) < 60).map(k => TOPICS[k].short);
+  const wrong = last.items.filter(it => it.sel !== 0);
+  const list = last.items.map((it,j) => ({it,j})).filter(({it}) => revFilter==="all" || (revFilter==="wrong" && it.sel!==0) || (revFilter==="flag" && it.flag));
+  app.innerHTML = `
+  <div class="card">
+    <div class="score">${ring(p)}
+      <div><h1>${last.score} out of ${last.total}</h1><p class="muted" style="margin:6px 0 0;max-width:52ch">${msg}${weak.length?` Focus on: <b>${weak.join(", ")}</b>.`:""}</p>
+        <div class="stats"><div><b>${last.score}</b><span>correct</span></div><div><b>${last.total-last.score-last.items.filter(i=>i.sel===null).length}</b><span>incorrect</span></div>
+        <div><b>${last.items.filter(i=>i.sel===null).length}</b><span>unanswered</span></div><div><b>${fmt(last.secs)}</b><span>time taken</span></div></div>
+      </div></div>
+    <div class="row mt2 noprint">
+      ${wrong.length ? `<button class="btn primary" data-act="retry">Retry the ${wrong.length} I missed</button>` : ""}
+      <button class="btn" data-act="tab" data-v="home">New quiz</button><button class="btn" data-act="print">Print results</button>
+    </div>
+  </div>
+  <div class="grid g2 mt">
+    <div class="card"><h2 style="font-size:1.15rem;margin-bottom:16px">Performance by topic</h2>${bars(last.bt, TOPIC_LABELS)}</div>
+    <div class="card"><h2 style="font-size:1.15rem;margin-bottom:16px">Theory vs applied</h2>${bars(last.bk, TYPE_LABELS)}</div>
+  </div>
+  <div class="card mt">
+    <div class="row" style="justify-content:space-between"><h2 style="font-size:1.15rem">Review answers</h2>
+      <div class="row noprint">${[["all","All"],["wrong","Missed"],["flag","Flagged"]].map(([v,l]) => `<button class="btn sm ${revFilter===v?"primary":""}" data-act="rev" data-v="${v}">${l}</button>`).join("")}</div></div>
+    <div class="mt">${list.length ? list.map(({it,j}) => { const q = byId[it.id];
+      const st = it.sel===null ? `<span class="pill na">Unanswered</span>` : it.sel===0 ? `<span class="pill ok">Correct</span>` : `<span class="pill bad">Incorrect</span>`;
+      return `<div class="rev"><div class="qmeta"><span class="num">Question ${j+1}</span>${st}<span class="badge">${TOPICS[q.t].short}</span><span class="badge type">${q.k==="T"?"Theory":"Applied"}</span></div>
+        <div class="qtext">${q.q}</div>
+        <div class="opts">${it.ord.map((oi,pos) => { const c = oi===0 ? "ok" : oi===it.sel ? "bad" : ""; const tag = oi===0 ? "Correct" : oi===it.sel ? "Your answer" : "";
+          return `<div class="opt ${c}"><span class="l">${LETTERS[pos]}</span><span>${q.o[oi]}</span>${tag?`<span class="tag">${tag}</span>`:""}</div>`; }).join("")}</div>
+        <div class="fb"><b class="h">Explanation</b>${q.e}</div></div>`; }).join("") : `<p class="muted">Nothing to show for this filter.</p>`}</div>
+  </div>`;
+}
+
+/* ---------- SHORT ANSWERS ---------- */
+function shortTotals(){
+  let got = 0, done = 0; const bt = {};
+  SHORT.forEach(q => { const s = sa[q.id]; const m = s && s.rev ? (s.pts||[]).filter(Boolean).length : 0;
+    if(s && s.rev){ done++; got += m; (bt[q.t] = bt[q.t] || [0,0])[0] += m; bt[q.t][1] += 5; } });
+  return { got, done, bt };
+}
+function vShort(){
+  const t = shortTotals();
+  app.innerHTML = `
+  <div class="card"><div class="row" style="justify-content:space-between">
+    <div><h1 style="font-size:1.6rem">Short-answer questions</h1><p class="muted" style="margin:6px 0 0;max-width:60ch">Attempt each answer before revealing the model answer. Then tick each marking point your answer covered – one mark per point, 5 marks per question.</p></div>
+    <div class="stats" style="margin:0"><div><b id="saTot">${t.got} / ${t.done*5}</b><span>marks on <span id="saDone">${t.done}</span> marked question(s)</span></div></div>
+  </div></div>
+  <div class="mt">${SHORT.map((q,i) => { const s = sa[q.id] || {}; const m = (s.pts||[]).filter(Boolean).length;
+    return `<article class="card sa" id="${q.id}">
+      <div class="qmeta"><span class="num">Question ${i+1} · 5 marks</span><span class="badge">${TOPICS[q.t].short}</span><span class="badge type">${q.k==="T"?"Theory":"Applied"}</span></div>
+      <div class="qtext" style="font-size:1.08rem">${q.q}</div>
+      <textarea data-sa="${q.id}" placeholder="Write your answer here…" aria-label="Your answer to question ${i+1}">${(s.text||"").replace(/&/g,"&amp;").replace(/</g,"&lt;")}</textarea>
+      ${s.rev ? `<div class="model"><h4>Model answer</h4>${q.model}</div>
+        <div class="model"><h4>Marking guide – tick what your answer included</h4>
+          ${q.pts.map((p,j) => `<label class="pt"><input type="checkbox" data-pt="${q.id}" data-j="${j}" ${(s.pts||[])[j]?"checked":""}><span>${p}</span></label>`).join("")}
+          <div class="mt marks">Your mark: <span data-mark="${q.id}">${m}</span> / 5</div></div>`
+       : `<div class="row mt"><button class="btn primary" data-act="reveal" data-id="${q.id}">Show model answer &amp; marking guide</button></div>`}
+    </article>`; }).join("")}</div>`;
+}
+
+/* ---------- PERFORMANCE ---------- */
+function vPerf(){
+  const hist = LS.get(K.hist, []), t = shortTotals();
+  const agg = {}, aggK = {};
+  hist.forEach(h => { for(const k in h.bt){ (agg[k] = agg[k] || [0,0])[0] += h.bt[k][0]; agg[k][1] += h.bt[k][1]; }
+                      for(const k in h.bk){ (aggK[k] = aggK[k] || [0,0])[0] += h.bk[k][0]; aggK[k][1] += h.bk[k][1]; } });
+  const best = hist.length ? Math.max(...hist.map(h => pct(h.score,h.total))) : 0;
+  const avg = hist.length ? Math.round(hist.reduce((s,h) => s + pct(h.score,h.total), 0)/hist.length) : 0;
+  app.innerHTML = `
+  <h1 style="font-size:1.8rem">My performance</h1>
+  <div class="grid g4 mt">
+    <div class="card"><div class="stats" style="margin:0"><div><b>${hist.length}</b><span>MCQ attempts</span></div></div></div>
+    <div class="card"><div class="stats" style="margin:0"><div><b>${hist.length?best+"%":"–"}</b><span>best MCQ score</span></div></div></div>
+    <div class="card"><div class="stats" style="margin:0"><div><b>${hist.length?avg+"%":"–"}</b><span>average MCQ score</span></div></div></div>
+    <div class="card"><div class="stats" style="margin:0"><div><b>${t.done?t.got+" / "+t.done*5:"–"}</b><span>short-answer marks (${t.done} marked)</span></div></div></div>
+  </div>
+  ${hist.length ? `
+  <div class="grid g2 mt">
+    <div class="card"><h2 style="font-size:1.15rem;margin-bottom:16px">MCQ accuracy by topic <span class="small muted" style="font-family:var(--sans);font-weight:400">all attempts</span></h2>${bars(agg, TOPIC_LABELS)}</div>
+    <div class="card"><h2 style="font-size:1.15rem;margin-bottom:16px">Theory vs applied <span class="small muted" style="font-family:var(--sans);font-weight:400">all attempts</span></h2>${bars(aggK, TYPE_LABELS)}</div>
+  </div>
+  <div class="card mt"><h2 style="font-size:1.15rem;margin-bottom:10px">Attempt history</h2><div class="tscroll"><table>
+    <thead><tr><th>Date</th><th>Mode</th><th class="n">Score</th><th class="n">%</th><th class="n">Time</th></tr></thead>
+    <tbody>${hist.map(h => `<tr><td>${new Date(h.date).toLocaleString([], {dateStyle:"medium", timeStyle:"short"})}</td><td>${h.mode==="exam"?"Test":"Practice"}</td>
+      <td class="n">${h.score} / ${h.total}</td><td class="n">${pct(h.score,h.total)}%</td><td class="n">${fmt(h.secs)}</td></tr>`).join("")}</tbody></table></div>
+    ${last ? `<div class="row mt"><button class="btn" data-act="tab" data-v="results">Review most recent attempt</button></div>` : ""}</div>`
+  : `<div class="card mt"><p class="muted" style="margin:0">No quiz attempts yet. Start a quiz from the Home tab and your results will appear here.</p></div>`}
+  ${t.done ? `<div class="card mt"><h2 style="font-size:1.15rem;margin-bottom:16px">Short-answer marks by topic</h2>${bars(t.bt, TOPIC_LABELS)}</div>` : ""}
+  <div class="row mt2"><button class="btn danger" data-act="reset">Clear all saved results</button><span class="small muted">Results are stored only in this browser.</span></div>`;
+}
+
+/* ---------- MODAL ---------- */
+function modal(title, body, okLabel, okAct){
+  document.getElementById("modal").innerHTML = `<div class="modal" data-act="close"><div class="card" role="dialog" aria-modal="true" aria-label="${title}">
+    <h2 style="font-size:1.25rem">${title}</h2><p class="muted">${body}</p>
+    <div class="row" style="justify-content:flex-end"><button class="btn" data-act="close">Cancel</button><button class="btn primary" data-act="${okAct}">${okLabel}</button></div></div></div>`;
+}
+function closeModal(){ document.getElementById("modal").innerHTML = ""; }
+
+/* ---------- EVENTS ---------- */
+document.addEventListener("click", e => {
+  const el = e.target.closest("[data-act]"); if(!el) return;
+  const a = el.dataset.act;
+  if(a==="close"){ if(e.target===el) closeModal(); return; }
+  const save = () => LS.set(K.att, att);
+  switch(a){
+    case "tab": go(el.dataset.v); break;
+    case "start": {
+      let ids = MCQ.filter(q => setup.topics.includes(q.t)).map(q => q.id);
+      if(setup.shuffle) ids = shuffle(ids);
+      if(att) modal("Start a new quiz?", "Your quiz in progress will be discarded.", "Start new quiz", "start2"); else startQuiz(ids, setup.mode);
+      break; }
+    case "start2": { closeModal(); let ids = MCQ.filter(q => setup.topics.includes(q.t)).map(q => q.id); if(setup.shuffle) ids = shuffle(ids); startQuiz(ids, setup.mode); break; }
+    case "discard": att = null; LS.del(K.att); render(); break;
+    case "pick": { const it = att.items[att.i]; if(locked(it)) break; it.sel = +el.dataset.o; save(); render(); break; }
+    case "check": { const it = att.items[att.i]; if(it.sel===null) break; it.chk = true; save(); render(); break; }
+    case "flag": att.items[att.i].flag = !att.items[att.i].flag; save(); render(); break;
+    case "prev": if(att.i>0){ att.i--; save(); render(); } break;
+    case "next": if(att.i<att.items.length-1){ att.i++; save(); render(); window.scrollTo(0,0); } break;
+    case "jump": att.i = +el.dataset.j; save(); render(); break;
+    case "submit": { const un = att.items.filter(i => i.sel===null).length;
+      modal("Finish the quiz?", un ? `You have ${un} unanswered question${un===1?"":"s"}. Unanswered questions are marked as incorrect.` : "You have answered every question. Ready to see your results?", "Finish", "finish"); break; }
+    case "finish": finish(); break;
+    case "retry": startQuiz(shuffle(last.items.filter(i => i.sel!==0).map(i => i.id)), "practice"); break;
+    case "rev": revFilter = el.dataset.v; render(); break;
+    case "print": window.print(); break;
+    case "reveal": { const id = el.dataset.id; sa[id] = Object.assign({text:"", pts:[]}, sa[id], {rev:true}); LS.set(K.sa, sa);
+      const y = window.scrollY; render(); window.scrollTo(0,y); break; }
+    case "reset": modal("Clear all saved results?", "This removes your quiz history, short-answer text and marks from this browser.", "Clear everything", "reset2"); break;
+    case "reset2": Object.values(K).forEach(k => LS.del(k)); att = null; last = null; sa = {}; closeModal(); go("home"); break;
+  }
+});
+document.addEventListener("change", e => {
+  const t = e.target;
+  if(t.name==="mode") setup.mode = t.value;
+  else if(t.name==="shuffle") setup.shuffle = t.checked;
+  else if(t.name==="topic"){ setup.topics = [...document.querySelectorAll('input[name=topic]:checked')].map(i => i.value); render(); }
+  else if(t.dataset.pt){ const id = t.dataset.pt; sa[id].pts = sa[id].pts || []; sa[id].pts[+t.dataset.j] = t.checked; LS.set(K.sa, sa);
+    document.querySelector(`[data-mark="${id}"]`).textContent = sa[id].pts.filter(Boolean).length;
+    const s = shortTotals(); document.getElementById("saTot").textContent = `${s.got} / ${s.done*5}`; document.getElementById("saDone").textContent = s.done; }
+});
+document.addEventListener("input", e => {
+  const id = e.target.dataset && e.target.dataset.sa; if(!id) return;
+  sa[id] = Object.assign({pts:[], rev:false}, sa[id], {text:e.target.value}); LS.set(K.sa, sa);
+});
+document.addEventListener("keydown", e => {
+  if(e.key==="Escape"){ closeModal(); return; }
+  if(view!=="quiz" || !att || document.getElementById("modal").innerHTML || e.ctrlKey || e.metaKey || e.altKey) return;
+  const it = att.items[att.i], k = e.key.toLowerCase(), pos = "abcd".indexOf(k) >= 0 ? "abcd".indexOf(k) : "1234".indexOf(k);
+  if(pos >= 0 && k.length===1 && !locked(it)){ it.sel = it.ord[pos]; LS.set(K.att, att); render(); }
+  else if(e.key==="ArrowRight" && att.i<att.items.length-1){ att.i++; render(); }
+  else if(e.key==="ArrowLeft" && att.i>0){ att.i--; render(); }
+});
+render();
+</script>
+</body>
+</html>
